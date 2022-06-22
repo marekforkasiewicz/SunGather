@@ -219,7 +219,7 @@ registers:
           value: "SG9.0RS"
         - response: 0x2609
           value: "SG10RS"
-    - name: "nominal_active_power"   
+    - name: "nominal_active_power"
       level: 2
       address: 5001
       datatype: "U16"
