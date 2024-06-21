@@ -925,22 +925,8 @@ registers:
       address: 6227
       datatype: "U16"
       unit: "kWh"
-      models: ["SH5K-20","SH3K6","SH4K6","SH5K-V13","SH5K-30","SH3K6-30","SH4K6-30","SH5.0RS","SH3.6RS","SH4.6RS","SH6.0RS","SH10RT","SH10RT-V112","SH10RT-20","SH8.0RT","SH6.0RT","SH5.0RT","SH5.0RT-V112"]
+      models: ["SH5K-20","SH3K6","SH4K6","SH5K-V13","SH5K-30","SH3K6-30","SH4K6-30","SH5.0RS","SH3.6RS","SH4.6RS","SH6.0RS","SH10RT","SH10RT-V112","SH8.0RT","SH6.0RT","SH5.0RT"]
     - name: "yearly_pv_energy_yields"
-      level: 2
-      address: 6276
-      datatype: "U32"
-      accuracy: 0.1
-      unit: "kWh"
-      models: ["SH5K-20","SH3K6","SH4K6","SH5K-V13","SH5K-30","SH3K6-30","SH4K6-30","SH5.0RS","SH3.6RS","SH4.6RS","SH6.0RS","SH10RT","SH10RT-V112","SH8.0RT","SH6.0RT","SH5.0RT"]
-    - name: "yearly_pv_generation_2029"
-      level: 2
-      address: 6278
-      datatype: "U32"
-      accuracy: 0.1
-      unit: "kWh"
-      models: ["SH5K-20","SH3K6","SH4K6","SH5K-V13","SH5K-30","SH3K6-30","SH4K6-30","SH5.0RS","SH3.6RS","SH4.6RS","SH6.0RS","SH10RT","SH10RT-V112","SH8.0RT","SH6.0RT","SH5.0RT"]
-    - name: "monthly_export_01_january"
       level: 2
       address: 6596
       datatype: "U16"
@@ -994,7 +980,7 @@ registers:
       accuracy: 0.1
       unit: "kWh"
       models: ["SH5K-20","SH3K6","SH4K6","SH5K-V13","SH5K-30","SH3K6-30","SH4K6-30","SH5.0RS","SH3.6RS","SH4.6RS","SH6.0RS","SH10RT","SH10RT-V112","SH10RT-20","SH8.0RT","SH6.0RT","SH5.0RT","SH5.0RT-V112"]
-    - name: "export_power_from_pv_yearly"    
+    - name: "export_power_from_pv_yearly"
       level: 2
       address: 6608
       datatype: "U16"
@@ -1255,6 +1241,12 @@ registers:
         - response: 0
           value: "-1"
       models: ["SH5K-20","SH3K6","SH4K6","SH5K-V13","SH5K-30","SH3K6-30","SH4K6-30","SH5.0RS","SH3.6RS","SH4.6RS","SH6.0RS","SH10RT","SH10RT-V112","SH10RT-20","SH8.0RT","SH6.0RT","SH5.0RT","SH5.0RT-V112"]
+    - name: "state_battery_charging_raw"
+      level: 2
+      address: 13001
+      datatype: "U16"
+      mask: 2
+      models: ["SH5K-20","SH3K6","SH4K6","SH5K-V13","SH5K-30","SH3K6-30","SH4K6-30","SH5.0RS","SH3.6RS","SH4.6RS","SH6.0RS","SH10RT","SH10RT-V112","SH8.0RT","SH6.0RT","SH5.0RT","SH5.0RT-V112"]
     - name: "state_battery_discharging"
       level: 2
       address: 13001
@@ -1266,6 +1258,12 @@ registers:
         - response: 0
           value: "-1"
       models: ["SH5K-20","SH3K6","SH4K6","SH5K-V13","SH5K-30","SH3K6-30","SH4K6-30","SH5.0RS","SH3.6RS","SH4.6RS","SH6.0RS","SH10RT","SH10RT-V112","SH10RT-20","SH8.0RT","SH6.0RT","SH5.0RT","SH5.0RT-V112"]
+    - name: "state_battery_discharging_raw"
+      level: 2
+      address: 13001
+      datatype: "U16"
+      mask: 4
+      models: ["SH5K-20","SH3K6","SH4K6","SH5K-V13","SH5K-30","SH3K6-30","SH4K6-30","SH5.0RS","SH3.6RS","SH4.6RS","SH6.0RS","SH10RT","SH10RT-V112","SH8.0RT","SH6.0RT","SH5.0RT","SH5.0RT-V112"]
     - name: "state_load_active"
       level: 2
       address: 13001
