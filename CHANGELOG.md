@@ -7,6 +7,59 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added - Deployment Automation 🚀
+- **Automated Installation Script** (`install.sh`)
+  - One-line installation command
+  - Automatic Docker & Docker Compose installation
+  - System requirements checking
+  - Interactive inverter configuration
+  - Health check validation
+  - Beautiful terminal UI with colors
+
+- **Deployment Script** (`deploy.sh`)
+  - Git pull automation
+  - Container rebuild and restart
+  - Health check validation
+  - Service status display
+  - Automatic cleanup of orphaned containers
+
+- **Docker Compose Stack** (`compose.yaml`)
+  - Multi-service orchestration
+  - SunGather backend service
+  - React dashboard with Nginx
+  - Health checks for all services
+  - Network isolation
+  - Volume management
+  - Automatic restart policies
+
+- **Production Dockerfile for Dashboard** (`dashboard/Dockerfile.prod`)
+  - Multi-stage build (Node.js + Nginx)
+  - Optimized image size
+  - Nginx configuration included
+  - Health check support
+  - Gzip compression
+  - Static asset caching
+
+- **Nginx Configuration** (`dashboard/nginx.conf`)
+  - API proxy to backend
+  - WebSocket support
+  - Static asset caching
+  - Gzip compression
+  - Security headers
+  - SPA routing support
+
+- **Environment Configuration** (`.env.example`)
+  - Timezone configuration
+  - Port mappings
+  - API URL configuration
+  - Docker Compose settings
+
+- **Quick Start Guide** (`QUICKSTART.md`)
+  - Three installation options
+  - Command reference
+  - Troubleshooting guide
+  - Configuration examples
+
 ### Added - Modern Web Dashboard 🎆
 - **FastAPI Backend** (`SunGather/exports/api.py`)
   - RESTful API with 7 endpoints
@@ -24,6 +77,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Real-time WebSocket connection
   - Dark mode support
   - Mobile-responsive design
+  - 15 component files
+  - Complete UI/UX implementation
 
 - **API Endpoints:**
   - `GET /api/v1/status` - System status
@@ -52,10 +107,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Webserver now tracks application health status
 - Added curl to Docker image for health checks
 - Updated requirements.txt with FastAPI dependencies
+- Dockerfile now supports multi-service architecture
 
 ### Documentation
 - Complete health check documentation with examples (`docs/HEALTHCHECK.md`)
 - Modern Web Dashboard architecture and guide (`docs/DASHBOARD.md`)
+- Fork features overview (`FORK_FEATURES.md`)
+- Quick start guide (`QUICKSTART.md`)
 - API endpoint documentation with examples
 - React component examples
 - Docker, Docker Compose, and Kubernetes integration guides
@@ -66,6 +124,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 ## Technical Details
+
+### Deployment Features
+- One-line installation: `curl -fsSL https://raw.githubusercontent.com/.../install.sh | bash`
+- Automatic dependency installation (Docker, Docker Compose)
+- System requirements validation (OS, disk space)
+- Interactive configuration wizard
+- Health check validation after installation
+- Beautiful terminal UI with colors and progress indicators
+- Automatic service discovery and URL display
+
+### Docker Stack
+- **Services:**
+  - `sungather` - Python backend (ports 8000, 8080)
+  - `dashboard` - React frontend with Nginx (port 3000)
+- **Health Checks:**
+  - SunGather: curl localhost:8080/health every 30s
+  - Dashboard: curl localhost:80 every 30s
+- **Networks:**
+  - Isolated bridge network for inter-service communication
+- **Volumes:**
+  - Config file mounted read-only
+  - Logs directory for persistence
 
 ### Health Check Features
 - HTTP 200/503 status codes based on application health
@@ -102,7 +182,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ✅ Health check endpoints
 - ✅ FastAPI backend
 - ✅ React dashboard structure
-- 🔨 Complete frontend implementation
+- ✅ Complete frontend implementation
+- ✅ Deployment automation
+- ✅ Docker Compose stack
 
 ### Phase 2 - Enhancement (Planned)
 - [ ] Multi-day/week/month charts
@@ -111,6 +193,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [ ] Alerts and notifications
 - [ ] Export data (CSV, PDF)
 - [ ] User settings panel
+- [ ] Telegram Bot integration
 
 ### Phase 3 - Advanced (Future)
 - [ ] Multiple inverter support
@@ -119,6 +202,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [ ] Mobile app (React Native)
 - [ ] Persistent storage (PostgreSQL/TimescaleDB)
 - [ ] Authentication & user management
+- [ ] Cloud deployment templates (AWS, Azure, GCP)
 
 ---
 
