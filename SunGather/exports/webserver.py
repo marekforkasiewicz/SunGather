@@ -6,10 +6,21 @@ from urllib.parse import parse_qs, urlparse
 import json
 import logging
 import urllib
+import time
+from datetime import datetime
 
 class export_webserver(object):
     html_body = "Pending Data Retrieval"
     metrics = ""
+    health_data = {
+        "status": "initializing",
+        "uptime_start": time.time(),
+        "last_scrape_time": None,
+        "last_scrape_success": False,
+        "total_registers": 0,
+        "inverter_connected": False
+    }
+    
     def __init__(self):
         False
 
@@ -20,8 +31,10 @@ class export_webserver(object):
             self.t = Thread(target=self.webServer.serve_forever)
             self.t.daemon = True    # Make it a deamon, so if main loop ends the webserver dies
             self.t.start()
+            export_webserver.health_data["status"] = "healthy"
             logging.info(f"Webserver: Configured")
         except Exception as err:
+            export_webserver.health_data["status"] = "unhealthy"
             logging.error(f"Webserver: Error: {err}")
             return False
         pending_config = False
@@ -73,11 +86,60 @@ class export_webserver(object):
         export_webserver.main = main_body
         export_webserver.metrics = metrics_body
         export_webserver.json = json.dumps(json_array)
+        
+        # Update health data
+        export_webserver.health_data["last_scrape_time"] = datetime.now().isoformat()
+        export_webserver.health_data["last_scrape_success"] = True
+        export_webserver.health_data["total_registers"] = len(inverter.latest_scrape)
+        export_webserver.health_data["inverter_connected"] = True
+        
         return True
 
 class MyServer(BaseHTTPRequestHandler):
     def do_GET(self):
-        if self.path.startswith('/metrics'):
+        if self.path.startswith('/health/detailed'):
+            # Detailed health check with full status information
+            self.send_response(200)
+            self.send_header("Content-type", "application/json")
+            self.end_headers()
+            
+            uptime_seconds = int(time.time() - export_webserver.health_data["uptime_start"])
+            
+            health_response = {
+                "status": export_webserver.health_data["status"],
+                "version": __version__,
+                "uptime_seconds": uptime_seconds,
+                "uptime_human": self._format_uptime(uptime_seconds),
+                "last_scrape_time": export_webserver.health_data["last_scrape_time"],
+                "last_scrape_success": export_webserver.health_data["last_scrape_success"],
+                "total_registers": export_webserver.health_data["total_registers"],
+                "inverter_connected": export_webserver.health_data["inverter_connected"],
+                "timestamp": datetime.now().isoformat()
+            }
+            
+            self.wfile.write(bytes(json.dumps(health_response, indent=2), "utf-8"))
+            
+        elif self.path.startswith('/health'):
+            # Simple health check - just HTTP 200 if healthy
+            status = export_webserver.health_data["status"]
+            if status == "healthy":
+                self.send_response(200)
+            elif status == "degraded":
+                self.send_response(503)  # Service Unavailable
+            else:
+                self.send_response(503)
+                
+            self.send_header("Content-type", "application/json")
+            self.end_headers()
+            
+            simple_response = {
+                "status": status,
+                "version": __version__
+            }
+            
+            self.wfile.write(bytes(json.dumps(simple_response), "utf-8"))
+            
+        elif self.path.startswith('/metrics'):
             self.send_response(200)
             self.send_header("Content-type", "text/plain")
             self.end_headers()
@@ -115,3 +177,22 @@ class MyServer(BaseHTTPRequestHandler):
 
     def log_message(self, format, *args):
         pass
+    
+    def _format_uptime(self, seconds):
+        """Format uptime in human readable format"""
+        days = seconds // 86400
+        hours = (seconds % 86400) // 3600
+        minutes = (seconds % 3600) // 60
+        secs = seconds % 60
+        
+        parts = []
+        if days > 0:
+            parts.append(f"{days}d")
+        if hours > 0:
+            parts.append(f"{hours}h")
+        if minutes > 0:
+            parts.append(f"{minutes}m")
+        if secs > 0 or not parts:
+            parts.append(f"{secs}s")
+            
+        return " ".join(parts)
